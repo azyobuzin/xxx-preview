@@ -1,0 +1,24 @@
+{
+  "name": "xxx-preview",
+  "version": "0.1.0",
+  "main": "app.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azyobuzin/xxx-preview.git"
+  },
+  "author": "azyobuzin <azyobuzin@users.sourceforge.jp>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "fix": "prettier --ignore-path .gitignore --write . !package-lock.json"
+  },
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.106",
+    "node-fetch": "^3.2.10"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1",
+    "prettier-plugin-md-nocjsp": "^1.4.0"
+  }
+}
