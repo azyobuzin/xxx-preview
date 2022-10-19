@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.106",
+    "aws-lambda-ric": "^2.0.0",
     "node-fetch": "^3.2.10"
   },
   "devDependencies": {

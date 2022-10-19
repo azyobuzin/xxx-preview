@@ -1,12 +1,29 @@
-FROM public.ecr.aws/lambda/nodejs:16
-RUN yum install -y ImageMagick tar xz
-RUN curl -sSLo ffmpeg.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz && \
-    tar -C /opt -xf ffmpeg.tar.xz && \
-    rm -f ffmpeg.tar.xz && \
-    ln /opt/ffmpeg-*/ffmpeg /usr/local/bin/ffmpeg
+FROM buildpack-deps:jammy AS node-download
+ENV NODE_VERSION 16.18.0
+RUN ARCH=$(dpkg --print-architecture) && \
+    if [ $ARCH = amd64 ]; then ARCH='x64'; fi && \
+    mkdir /node && \
+    curl -fsSLo - "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" | \
+    tar -xJf - -C /node --strip-components=1 --no-same-owner --wildcards --wildcards-match-slash '*/*/**'
 
-ENV NODE_ENV=production
-COPY app.js package.json package-lock.json ${LAMBDA_TASK_ROOT}/
+FROM buildpack-deps:jammy AS builder
+RUN apt-get update && \
+    apt-get install -y cmake && \
+    rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV production
+WORKDIR /function
+COPY --from=node-download /node /usr/local
+COPY package.json package-lock.json ./
 RUN npm install
 
+FROM ubuntu:jammy
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates ffmpeg imagemagick && \
+    rm -rf /var/lib/apt/lists/*
+COPY --from=node-download /node /usr/local
+ENV NODE_ENV production
+WORKDIR /function
+COPY --from=builder /function .
+COPY app.js ./
+ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
 CMD ["app.handler"]
