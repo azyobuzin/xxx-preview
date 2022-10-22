@@ -1,14 +1,14 @@
 // @ts-check
 
-const { spawn } = require("child_process");
 const { mkdir, rm, readFile } = require("fs/promises");
 const path = require("path");
+const execFile = require("util").promisify(require("child_process").execFile);
 
 const MAX_WIDTH = 600;
 const MAX_HEIGHT = 600;
 
 /**
- * @type {import("aws-lambda").APIGatewayProxyHandler}
+ * @type {import("aws-lambda").APIGatewayProxyHandlerV2}
  */
 exports.handler = async function (event, context) {
   /** @type {string} */
@@ -187,36 +187,19 @@ function downloadData(res, destPath) {
 async function makePngPreview(srcPath) {
   const destPath = path.normalize(path.join(srcPath, "..", "output.png"));
 
-  await /** @type {Promise<void>} */ (
-    new Promise((resolve, reject) => {
-      const cp = spawn(
-        "convert",
-        [
-          srcPath,
-          "-resize",
-          `${MAX_WIDTH}x${MAX_HEIGHT}>`,
-          "-quality",
-          "96",
-          destPath,
-        ],
-        {
-          stdio: ["ignore", "inherit", "inherit"],
-          timeout: 5000,
-        }
-      );
-
-      cp.on("exit", (code) => {
-        if (code == 0) {
-          resolve();
-        } else {
-          reject(new Error(`convert returns exit code ${code}`));
-        }
-      });
-
-      cp.on("error", (e) => {
-        reject(e);
-      });
-    })
+  await execFile(
+    "convert",
+    [
+      srcPath,
+      "-resize",
+      `${MAX_WIDTH}x${MAX_HEIGHT}>`,
+      "-quality",
+      "96",
+      destPath,
+    ],
+    {
+      timeout: 5000,
+    }
   );
 
   return { path: destPath, contentType: "image/png" };
@@ -229,37 +212,24 @@ async function makePngPreview(srcPath) {
 async function makeJpegPreview(srcPath) {
   const destPath = path.normalize(path.join(srcPath, "..", "output.jpg"));
 
-  return new Promise((resolve, reject) => {
-    const cp = spawn(
-      "convert",
-      [
-        srcPath,
-        "-interlace",
-        "JPEG",
-        "-resize",
-        `${MAX_WIDTH}x${MAX_HEIGHT}>`,
-        "-quality",
-        "85",
-        destPath,
-      ],
-      {
-        stdio: ["ignore", "inherit", "inherit"],
-        timeout: 5000,
-      }
-    );
+  await execFile(
+    "convert",
+    [
+      srcPath,
+      "-interlace",
+      "JPEG",
+      "-resize",
+      `${MAX_WIDTH}x${MAX_HEIGHT}>`,
+      "-quality",
+      "85",
+      destPath,
+    ],
+    {
+      timeout: 5000,
+    }
+  );
 
-    cp.on("exit", (code) => {
-      if (code === 0) {
-        resolve({ path: destPath, contentType: "image/jpeg" });
-      } else {
-        reject(new Error(`convert returns exit code ${code}`));
-      }
-    });
-
-    cp.on("error", (e) => {
-      reject(e);
-    });
-  });
+  return { path: destPath, contentType: "image/jpeg" };
 }
 
 /**
@@ -269,41 +239,24 @@ async function makeJpegPreview(srcPath) {
 async function makeVideoPreview(srcPath) {
   const destPath = path.normalize(path.join(srcPath, "..", "output.jpg"));
 
-  await /** @type {Promise<void>} */ (
-    new Promise((resolve, reject) => {
-      const cp = spawn(
-        "ffmpeg",
-        [
-          "-hide_banner",
-          "-loglevel",
-          "warning",
-          "-y",
-          "-i",
-          srcPath,
-          "-vframes",
-          "1",
-          "-f",
-          "mjpeg",
-          destPath,
-        ],
-        {
-          stdio: ["ignore", "inherit", "inherit"],
-          timeout: 10000,
-        }
-      );
-
-      cp.on("exit", (code) => {
-        if (code == 0) {
-          resolve();
-        } else {
-          reject(new Error(`ffmpeg returns exit code ${code}`));
-        }
-      });
-
-      cp.on("error", (e) => {
-        reject(e);
-      });
-    })
+  await execFile(
+    "ffmpeg",
+    [
+      "-hide_banner",
+      "-loglevel",
+      "warning",
+      "-y",
+      "-i",
+      srcPath,
+      "-vframes",
+      "1",
+      "-f",
+      "mjpeg",
+      destPath,
+    ],
+    {
+      timeout: 10000,
+    }
   );
 
   return { path: destPath, contentType: "image/jpeg" };
