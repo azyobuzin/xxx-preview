@@ -194,7 +194,7 @@ async function makePngPreview(srcPath) {
       "-resize",
       `${MAX_WIDTH}x${MAX_HEIGHT}>`,
       "-quality",
-      "96",
+      "75",
       destPath,
     ],
     {
