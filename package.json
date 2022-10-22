@@ -2,7 +2,6 @@
   "name": "xxx-preview",
   "version": "0.1.0",
   "main": "app.js",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/azyobuzin/xxx-preview.git"
@@ -14,7 +13,7 @@
     "fix": "prettier --ignore-path .gitignore --write . !package-lock.json"
   },
   "dependencies": {
-    "@types/aws-lambda": "^8.10.106",
+    "@types/aws-lambda": "^8.10.108",
     "aws-lambda-ric": "^2.0.0",
     "node-fetch": "^3.2.10"
   },

@@ -1,11 +1,8 @@
 // @ts-check
 
-import { spawn } from "node:child_process";
-import { createHmac } from "node:crypto";
-import { createWriteStream } from "node:fs";
-import { mkdir, rm, readFile } from "node:fs/promises";
-import * as path from "node:path";
-import fetch, { AbortError } from "node-fetch";
+const { spawn } = require("child_process");
+const { mkdir, rm, readFile } = require("fs/promises");
+const path = require("path");
 
 const MAX_WIDTH = 600;
 const MAX_HEIGHT = 600;
@@ -13,7 +10,7 @@ const MAX_HEIGHT = 600;
 /**
  * @type {import("aws-lambda").APIGatewayProxyHandler}
  */
-export async function handler(event, context) {
+exports.handler = async function (event, context) {
   /** @type {string} */
   // @ts-ignore
   const sig = event.pathParameters.sig;
@@ -42,6 +39,8 @@ export async function handler(event, context) {
 
   const tmpDir = `/tmp/${context.awsRequestId}`;
   await mkdir(tmpDir);
+
+  const { default: fetch, AbortError } = await import("node-fetch");
 
   try {
     const controller = new AbortController();
@@ -130,7 +129,7 @@ export async function handler(event, context) {
   } finally {
     await rm(tmpDir, { recursive: true });
   }
-}
+};
 
 /**
  * @param {string} sig
@@ -139,7 +138,7 @@ export async function handler(event, context) {
  */
 function verifySignature(sig, encodedUrl) {
   const key = /** @type {string} */ (process.env.SECRET_KEY_BASE);
-  const hmac = createHmac("sha1", key);
+  const hmac = require("crypto").createHmac("sha1", key);
   hmac.update(encodedUrl);
   const buf = hmac.digest();
   return Buffer.from(sig, "base64url").equals(buf);
@@ -158,6 +157,7 @@ function downloadData(res, destPath) {
   }
 
   return new Promise((resolve, reject) => {
+    const { createWriteStream } = require("fs");
     const downloadStream = createWriteStream(destPath, {
       flags: "wx",
     });
