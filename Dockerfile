@@ -21,7 +21,7 @@ RUN npm install
 
 FROM ubuntu:jammy
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates ffmpeg imagemagick && \
+    apt-get install -y --no-install-recommends ca-certificates ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 COPY --from=node-download /node /usr/local
 ENV NODE_ENV production
@@ -29,5 +29,6 @@ ARG FUNCTION_DIR
 WORKDIR ${FUNCTION_DIR}
 COPY --from=builder ${FUNCTION_DIR} ${FUNCTION_DIR}
 COPY app.js ./
+COPY lib ./lib
 ENTRYPOINT ["/usr/local/bin/node", "node_modules/.bin/aws-lambda-ric"]
 CMD ["app.handler"]

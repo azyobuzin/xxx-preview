@@ -14,8 +14,10 @@
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.108",
+    "@types/sharp": "^0.31.0",
     "aws-lambda-ric": "^2.0.0",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^3.2.10",
+    "sharp": "^0.31.1"
   },
   "devDependencies": {
     "prettier": "^2.7.1",
