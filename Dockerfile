@@ -1,7 +1,7 @@
 ARG FUNCTION_DIR=/function
 
 FROM buildpack-deps:jammy AS node-download
-ENV NODE_VERSION 16.18.0
+ENV NODE_VERSION 16.18.1
 RUN ARCH=$(dpkg --print-architecture) && \
     if [ $ARCH = amd64 ]; then ARCH='x64'; fi && \
     mkdir /node && \
