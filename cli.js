@@ -17,7 +17,7 @@ require("fs/promises")
     console.log(res);
     return writeFile(
       "output",
-      Buffer.from(/** @type {string} */ (res.body), "base64")
+      Buffer.from(/** @type {string} */ (res.body), "base64"),
     );
   })
   .catch((err) => {
