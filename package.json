@@ -1,7 +1,8 @@
 {
   "name": "xxx-preview",
   "version": "0.1.0",
-  "main": "app.js",
+  "main": "app.mjs",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/azyobuzin/xxx-preview.git"

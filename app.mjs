@@ -1,12 +1,13 @@
 // @ts-check
 
-const { mkdir, rm } = require("fs/promises");
-const { makePreviewForUrl } = require("./lib/preview");
+import { createHmac } from "node:crypto";
+import { mkdir, rm } from "node:fs/promises";
+import { makePreviewForUrl } from "./lib/preview.mjs";
 
 /**
  * @type {import("aws-lambda").APIGatewayProxyHandlerV2}
  */
-exports.handler = async function (event, context) {
+export async function handler(event, context) {
   /** @type {string} */
   // @ts-ignore
   const sig = event.pathParameters.sig;
@@ -41,7 +42,7 @@ exports.handler = async function (event, context) {
   } finally {
     await rm(tmpDir, { recursive: true });
   }
-};
+}
 
 /**
  * @param {string} sig
@@ -50,7 +51,7 @@ exports.handler = async function (event, context) {
  */
 function verifySignature(sig, encodedUrl) {
   const key = /** @type {string} */ (process.env.SECRET_KEY_BASE);
-  const hmac = require("crypto").createHmac("sha1", key);
+  const hmac = createHmac("sha1", key);
   hmac.update(encodedUrl);
   const buf = hmac.digest();
   return Buffer.from(sig, "base64url").equals(buf);

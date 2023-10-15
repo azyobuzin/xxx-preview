@@ -1,7 +1,9 @@
 // @ts-check
 
-const { writeFile } = require("fs/promises");
-const { makePreviewForUrl } = require("./lib/preview");
+import { mkdtemp, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { makePreviewForUrl } from "./lib/preview.mjs";
 
 const url = process.argv[2];
 
@@ -10,8 +12,7 @@ if (!url) {
   process.exit(1);
 }
 
-require("fs/promises")
-  .mkdtemp(require("path").join(require("os").tmpdir(), "xxxpreview-"))
+mkdtemp(join(tmpdir(), "xxxpreview-"))
   .then((tmpDir) => makePreviewForUrl(url, tmpDir))
   .then((res) => {
     console.log(res);

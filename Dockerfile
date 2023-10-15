@@ -17,7 +17,7 @@ ARG FUNCTION_DIR
 WORKDIR ${FUNCTION_DIR}
 COPY --from=node-download /node /usr/local
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 
 FROM ubuntu:jammy
 RUN apt-get update && \
@@ -28,7 +28,7 @@ ENV NODE_ENV production
 ARG FUNCTION_DIR
 WORKDIR ${FUNCTION_DIR}
 COPY --from=builder ${FUNCTION_DIR} ${FUNCTION_DIR}
-COPY app.js ./
+COPY app.mjs ./
 COPY lib ./lib
 ENTRYPOINT ["/usr/local/bin/node", "node_modules/.bin/aws-lambda-ric"]
 CMD ["app.handler"]
