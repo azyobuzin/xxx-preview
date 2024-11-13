@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "checkJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "Node16",
+    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+    "strict": true,
+    "target": "ESNext",
+    "verbatimModuleSyntax": true
+  }
+}
