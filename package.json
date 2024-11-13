@@ -14,12 +14,12 @@
     "fix": "prettier --ignore-path .gitignore --write . !package-lock.json"
   },
   "dependencies": {
-    "@types/aws-lambda": "^8.10.124",
-    "aws-lambda-ric": "^3.0.0",
-    "node-fetch": "^3.3.2",
-    "sharp": "^0.32.6"
+    "@types/aws-lambda": "8.10.145",
+    "aws-lambda-ric": "3.2.1",
+    "node-fetch": "3.3.2",
+    "sharp": "0.33.5"
   },
   "devDependencies": {
-    "prettier": "^3.0.3"
+    "prettier": "3.3.3"
   }
 }
