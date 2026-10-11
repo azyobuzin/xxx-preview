@@ -3,5 +3,5 @@
 .gitignore
 Dockerfile
 node_modules
-test
-test-support
+mise.toml
+mise.local.toml
