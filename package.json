@@ -14,10 +14,9 @@
     "fix": "prettier --ignore-path .gitignore --write . !package-lock.json"
   },
   "dependencies": {
-    "@types/aws-lambda": "8.10.145",
-    "aws-lambda-ric": "3.2.1",
-    "node-fetch": "3.3.2",
-    "sharp": "0.33.5"
+    "@types/aws-lambda": "8.10.164",
+    "aws-lambda-ric": "4.0.2",
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "@types/node": "22.9.0",
