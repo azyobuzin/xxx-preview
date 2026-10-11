@@ -1,5 +1,7 @@
 .dockerignore
 .github
 .gitignore
-node_modules
 Dockerfile
+node_modules
+test
+test-support

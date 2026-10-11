@@ -1,7 +1,7 @@
 {
   "name": "xxx-preview",
   "version": "0.1.0",
-  "main": "app.mjs",
+  "main": "server.mjs",
   "type": "module",
   "repository": {
     "type": "git",
@@ -11,11 +11,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test",
     "fix": "prettier --ignore-path .gitignore --write . !package-lock.json"
   },
   "dependencies": {
-    "@types/aws-lambda": "8.10.164",
-    "aws-lambda-ric": "4.0.2",
+    "@hono/node-server": "2.1.4",
+    "hono": "4.13.13",
     "sharp": "0.35.5"
   },
   "devDependencies": {
