@@ -7,7 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/azyobuzin/xxx-preview.git"
   },
-  "author": "azyobuzin <azyobuzin@users.sourceforge.jp>",
+  "author": "azyobuzin <azyobuzin-dev@azyobuzi.net>",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "@types/node": "22.9.0",
-    "prettier": "3.3.3"
+    "prettier": "3.9.10"
   }
 }
