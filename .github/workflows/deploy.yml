@@ -1,3 +1,5 @@
+name: Deploy
+
 on:
   push:
     branches: [main]
@@ -11,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ secrets.REGISTRY }}/xxx-preview@${{ fromJSON(steps.bake.outputs.metadata).production['containerimage.digest'] }}
+      digest: ${{ fromJSON(steps.bake.outputs.metadata).production['containerimage.digest'] }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: auth
@@ -51,5 +53,5 @@ jobs:
       - uses: google-github-actions/deploy-cloudrun@2028e2d7d30a78c6910e0632e48dd561b064884d # v3.0.1
         with:
           service: ${{ vars.CLOUDRUN_SERVICE }}
-          image: ${{ needs.build.outputs.image }}
+          image: ${{ secrets.REGISTRY }}/xxx-preview@${{ needs.build.outputs.digest }}
           region: asia-northeast1
