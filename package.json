@@ -16,7 +16,7 @@
     "fix": "prettier --ignore-path .gitignore --write . !package-lock.json"
   },
   "dependencies": {
-    "@hono/node-server": "2.1.4",
+    "@hono/node-server": "2.1.6",
     "hono": "4.13.13",
     "sharp": "0.35.5"
   },
